@@ -1,0 +1,56 @@
+{
+    "image1": "/data/awsaf/projects/ece281/Hierarchical-Localization/datasets/front-door/IMG_1224.JPG",
+    "image2": "/data/awsaf/projects/ece281/Hierarchical-Localization/datasets/front-door/IMG_1225.JPG",
+    "point_pairs": [
+        {
+            "image1_point": [
+                1153,
+                395
+            ],
+            "image2_point": [
+                2217,
+                557
+            ]
+        },
+        {
+            "image1_point": [
+                1363,
+                574
+            ],
+            "image2_point": [
+                2276,
+                630
+            ]
+        },
+        {
+            "image1_point": [
+                1315,
+                1192
+            ],
+            "image2_point": [
+                2264,
+                1242
+            ]
+        },
+        {
+            "image1_point": [
+                1897,
+                1209
+            ],
+            "image2_point": [
+                2817,
+                1267
+            ]
+        },
+        {
+            "image1_point": [
+                1916,
+                590
+            ],
+            "image2_point": [
+                2804,
+                665
+            ]
+        }
+    ]
+}
