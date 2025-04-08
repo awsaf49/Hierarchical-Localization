@@ -33,6 +33,30 @@ class PointMapper:
         # Store point pairs: [[x1, y1, x2, y2], ...]
         self.point_pairs = []
 
+        # Load existing point pairs if the output file exists
+        self.existing_data = None
+        if os.path.exists(self.output_path):
+            try:
+                with open(self.output_path, "r") as f:
+                    self.existing_data = json.load(f)
+                    # Check if the existing file contains the same image pair
+                    if self.existing_data.get("image1") == os.path.abspath(
+                        self.img1_path
+                    ) and self.existing_data.get("image2") == os.path.abspath(
+                        self.img2_path
+                    ):
+                        print(
+                            f"Found existing point pairs for these images in {self.output_path}"
+                        )
+                        # Load existing point pairs into our current list
+                        for pair in self.existing_data.get("point_pairs", []):
+                            x1, y1 = pair["image1_point"]
+                            x2, y2 = pair["image2_point"]
+                            self.point_pairs.append([x1, y1, x2, y2])
+            except (json.JSONDecodeError, IOError) as e:
+                print(f"Error loading existing point pairs: {e}")
+                self.existing_data = None
+
         # Flag to track which image we're currently selecting a point in
         self.selecting_img1 = True
         self.current_pair = [None, None]
@@ -62,6 +86,19 @@ class PointMapper:
         # Connect event handlers
         self.fig.canvas.mpl_connect("button_press_event", self.on_click)
         self.fig.canvas.mpl_connect("key_press_event", self.on_key)
+
+        # Display any existing point pairs
+        if self.point_pairs:
+            for i, (x1, y1, x2, y2) in enumerate(self.point_pairs):
+                color = plt.cm.tab10((i + 1) % 10)
+
+                # Plot points with the same color
+                self.ax1.plot(x1, y1, "o", color=color, markersize=5)
+                self.ax2.plot(x2, y2, "o", color=color, markersize=5)
+
+                # Add labels with the point pair index
+                self.ax1.text(x1 + 5, y1 + 5, str(i + 1), color=color)
+                self.ax2.text(x2 + 5, y2 + 5, str(i + 1), color=color)
 
         # Create text for instructions
         self.instruction_text = self.fig.text(
@@ -193,6 +230,15 @@ class PointMapper:
 
     def save_points(self):
         """Save the point pairs to a JSON file."""
+        # Check if existing data file exists and load it
+        existing_data = None
+        if os.path.exists(self.output_path):
+            try:
+                with open(self.output_path, "r") as f:
+                    existing_data = json.load(f)
+            except (json.JSONDecodeError, IOError):
+                existing_data = None
+
         # Format the data for output
         data = {
             "image1": os.path.abspath(self.img1_path),
@@ -200,10 +246,40 @@ class PointMapper:
             "point_pairs": [],
         }
 
+        # Add new point pairs from current session
         for x1, y1, x2, y2 in self.point_pairs:
             data["point_pairs"].append(
                 {"image1_point": [int(x1), int(y1)], "image2_point": [int(x2), int(y2)]}
             )
+
+        # If we have existing data for the same image pair, preserve those points too
+        if existing_data:
+            # Check if it's the same image pair
+            if (
+                existing_data.get("image1") == data["image1"]
+                and existing_data.get("image2") == data["image2"]
+            ):
+                # Get only existing points that aren't duplicates of our new points
+                existing_points = existing_data.get("point_pairs", [])
+                new_points_set = {
+                    (
+                        p["image1_point"][0],
+                        p["image1_point"][1],
+                        p["image2_point"][0],
+                        p["image2_point"][1],
+                    )
+                    for p in data["point_pairs"]
+                }
+
+                for point in existing_points:
+                    point_tuple = (
+                        point["image1_point"][0],
+                        point["image1_point"][1],
+                        point["image2_point"][0],
+                        point["image2_point"][1],
+                    )
+                    if point_tuple not in new_points_set:
+                        data["point_pairs"].append(point)
 
         # Save to JSON file
         with open(self.output_path, "w") as f:
@@ -257,8 +333,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Map corresponding points between two images."
     )
-    parser.add_argument("image1", help="Path to the first image")
-    parser.add_argument("image2", help="Path to the second image")
+    parser.add_argument("--image1", help="Path to the first image")
+    parser.add_argument("--image2", help="Path to the second image")
     parser.add_argument(
         "--output",
         "-o",

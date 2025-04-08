@@ -4,16 +4,6 @@
     "point_pairs": [
         {
             "image1_point": [
-                1153,
-                395
-            ],
-            "image2_point": [
-                2217,
-                557
-            ]
-        },
-        {
-            "image1_point": [
                 1363,
                 574
             ],
@@ -50,6 +40,66 @@
             "image2_point": [
                 2804,
                 665
+            ]
+        },
+        {
+            "image1_point": [
+                1138,
+                1776
+            ],
+            "image2_point": [
+                2111,
+                1806
+            ]
+        },
+        {
+            "image1_point": [
+                2026,
+                1800
+            ],
+            "image2_point": [
+                2958,
+                1848
+            ]
+        },
+        {
+            "image1_point": [
+                1048,
+                2772
+            ],
+            "image2_point": [
+                2088,
+                2795
+            ]
+        },
+        {
+            "image1_point": [
+                2002,
+                2789
+            ],
+            "image2_point": [
+                2994,
+                2813
+            ]
+        },
+        {
+            "image1_point": [
+                226,
+                1639
+            ],
+            "image2_point": [
+                1211,
+                1657
+            ]
+        },
+        {
+            "image1_point": [
+                214,
+                1746
+            ],
+            "image2_point": [
+                1205,
+                1758
             ]
         }
     ]

@@ -76,10 +76,21 @@ def apply_homography(H, point):
 
 
 def visualize_homography_mapping(
-    image1_path, image2_path, src_points, dst_points, mapped_points
+    image1_path, image2_path, src_points, dst_points, mapped_points, 
+    test_src_points=None, test_dst_points=None, test_mapped_points=None
 ):
     """
     Visualize the original points and the mapped points on images
+    
+    Args:
+        image1_path: Path to first image
+        image2_path: Path to second image
+        src_points: Source points used for homography estimation
+        dst_points: Destination points used for homography estimation
+        mapped_points: Source points after applying homography
+        test_src_points: Test source points (not used in homography computation)
+        test_dst_points: Test destination points (ground truth)
+        test_mapped_points: Test source points after applying homography
     """
     try:
         import cv2
@@ -103,24 +114,49 @@ def visualize_homography_mapping(
         ax1.imshow(img1)
         ax2.imshow(img2)
 
-        # Plot original points on image 1
+        # Plot training points on image 1 (circle markers)
         for point in src_points:
-            ax1.add_patch(Circle((point[0], point[1]), 5, color="red", fill=True))
+            ax1.add_patch(Circle((point[0], point[1]), 10, color="red", fill=True))
 
-        # Plot original points on image 2
+        # Plot training points on image 2 (circle markers)
         for point in dst_points:
-            ax2.add_patch(Circle((point[0], point[1]), 5, color="blue", fill=True))
+            ax2.add_patch(Circle((point[0], point[1]), 10, color="blue", fill=True))
 
-        # Plot mapped points on image 2
+        # Plot mapped training points on image 2 (plus markers)
         for point in mapped_points:
-            ax2.add_patch(
-                Circle((point[0], point[1]), 5, color="green", fill=False, linewidth=2)
-            )
+            ax2.plot(point[0], point[1], 'g+', markersize=12, markeredgewidth=2)
+            
+        # Plot test points if provided
+        if test_src_points is not None and test_dst_points is not None and test_mapped_points is not None:
+            # Test points on image 1 (diamond markers)
+            for point in test_src_points:
+                ax1.plot(point[0], point[1], 'md', markersize=10)
+                
+            # Ground truth test points on image 2 (diamond markers)
+            for point in test_dst_points:
+                ax2.plot(point[0], point[1], 'md', markersize=10)
+                
+            # Mapped test points on image 2 (x markers)
+            for point in test_mapped_points:
+                ax2.plot(point[0], point[1], 'yx', markersize=12, markeredgewidth=2)
 
-        ax1.set_title("Image 1 with Source Points")
-        ax2.set_title(
-            "Image 2 with Destination Points (blue) and Mapped Points (green)"
-        )
+        # Add legend
+        handles = [
+            plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='r', markersize=10, label='Training Source Points'),
+            plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='b', markersize=10, label='Training Destination Points'),
+            plt.Line2D([0], [0], marker='+', color='g', markersize=10, label='Mapped Training Points'),
+        ]
+        
+        if test_src_points is not None:
+            handles.extend([
+                plt.Line2D([0], [0], marker='d', color='m', markersize=10, label='Test Points'),
+                plt.Line2D([0], [0], marker='x', color='y', markersize=10, label='Mapped Test Points')
+            ])
+            
+        ax2.legend(handles=handles, loc='upper right')
+
+        ax1.set_title('Image 1 with Source Points')
+        ax2.set_title('Image 2 with Destination and Mapped Points')
 
         plt.tight_layout()
         plt.savefig("homography_mapping.png")
@@ -139,19 +175,41 @@ def main():
     # Extract image paths and point pairs
     image1_path = data["image1"]
     image2_path = data["image2"]
-
-    # Get point pairs
-    src_points = np.array([pair["image1_point"] for pair in data["point_pairs"]])
-    dst_points = np.array([pair["image2_point"] for pair in data["point_pairs"]])
+    
+    # Get all point pairs
+    all_src_points = np.array([pair["image1_point"] for pair in data["point_pairs"]])
+    all_dst_points = np.array([pair["image2_point"] for pair in data["point_pairs"]])
+    
+    # Split data into training (for homography estimation) and testing sets
+    # Use 70% of points for training, 30% for testing
+    n_points = len(all_src_points)
+    n_train = int(0.7 * n_points)
+    
+    # Ensure we have at least 4 points for DLT
+    n_train = max(n_train, 4)
+    
+    # Random indices for training
+    np.random.seed(42)  # For reproducibility
+    train_indices = np.random.choice(n_points, n_train, replace=False)
+    test_indices = np.array([i for i in range(n_points) if i not in train_indices])
+    
+    # Split the data
+    src_points = all_src_points[train_indices]
+    dst_points = all_dst_points[train_indices]
+    
+    test_src_points = all_src_points[test_indices]
+    test_dst_points = all_dst_points[test_indices]
+    
+    print(f"Using {len(src_points)} points for homography estimation and {len(test_src_points)} points for testing")
 
     # Compute homography matrix using DLT
     H = compute_homography_dlt(src_points, dst_points)
 
     print("Computed Homography Matrix:")
     print(H)
-    print("\nVerification of point mappings:")
+    print("\nVerification of point mappings (Training Set):")
 
-    # Map all points and compute errors
+    # Map all training points and compute errors
     mapped_points = []
     total_error = 0
 
@@ -177,29 +235,47 @@ def main():
 
         total_error += error
 
-    print(f"\nAverage error: {total_error/len(src_points):.2f} pixels")
-
-    # Test with a new point (using the first point as test)
-    test_point = src_points[0]
-    print(f"\nTest with first point: {test_point}")
-    mapped_test = apply_homography(H, test_point)
-    actual_dest = dst_points[0]
-    test_error = np.sqrt(
-        (mapped_test[0] - actual_dest[0]) ** 2 + (mapped_test[1] - actual_dest[1]) ** 2
-    )
-
-    print(f"Mapped to: [{mapped_test[0]:.2f}, {mapped_test[1]:.2f}]")
-    print(f"Actual destination: {actual_dest}")
-    print(f"Error: {test_error:.2f} pixels")
+    print(f"\nAverage training error: {total_error/len(src_points):.2f} pixels")
+    
+    # Test with points not used for homography estimation
+    print("\nTesting with held-out points:")
+    test_mapped_points = []
+    test_total_error = 0
+    
+    for i in range(len(test_src_points)):
+        src_point = test_src_points[i]
+        dst_point = test_dst_points[i]
+        
+        # Apply homography to test source point
+        mapped_point = apply_homography(H, src_point)
+        test_mapped_points.append(mapped_point)
+        
+        # Calculate error
+        error = np.sqrt(
+            (mapped_point[0] - dst_point[0]) ** 2
+            + (mapped_point[1] - dst_point[1]) ** 2
+        )
+        
+        print(f"Test Point {i+1}:")
+        print(f"  Source: {src_point}")
+        print(f"  Actual destination: {dst_point}")
+        print(f"  Mapped destination: [{mapped_point[0]:.2f}, {mapped_point[1]:.2f}]")
+        print(f"  Error: {error:.2f} pixels")
+        
+        test_total_error += error
+    
+    if len(test_src_points) > 0:
+        print(f"\nAverage test error: {test_total_error/len(test_src_points):.2f} pixels")
 
     # Visualize the results
     try:
         visualize_homography_mapping(
-            image1_path, image2_path, src_points, dst_points, mapped_points
+            image1_path, image2_path, 
+            src_points, dst_points, mapped_points,
+            test_src_points, test_dst_points, test_mapped_points
         )
     except Exception as e:
         print(f"Error in visualization: {e}")
-
 
 if __name__ == "__main__":
     main()
