@@ -1,0 +1,1 @@
+python3 compute_homography.py --image1 datasets/front-door/IMG_1224.JPG --image2 datasets/front-door/IMG_1230.JPG

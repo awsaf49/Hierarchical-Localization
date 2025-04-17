@@ -110,15 +110,15 @@ def visualize_homography_mapping(
             return
 
         # Convert from BGR to RGB for matplotlib
-        img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
-        img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+        img1_rgb = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+        img2_rgb = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
 
-        # Create figure with two subplots
+        # Create figure with two subplots for original visualization
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7))
 
         # Display images
-        ax1.imshow(img1)
-        ax2.imshow(img2)
+        ax1.imshow(img1_rgb)
+        ax2.imshow(img2_rgb)
 
         # Plot training points on image 1 (circle markers)
         for point in src_points:
@@ -210,6 +210,58 @@ def visualize_homography_mapping(
         plt.tight_layout()
         plt.savefig("homography_mapping.png")
         print("Visualization saved as 'homography_mapping.png'")
+        
+        # NEW CODE: Apply full image transformation using homography
+        # Get the homography matrix from the main function
+        H = compute_homography_dlt(src_points, dst_points)
+        
+        # Get dimensions of the images
+        h1, w1 = img1.shape[:2]
+        h2, w2 = img2.shape[:2]
+        
+        # Apply the perspective transformation to warp image1 onto image2 space
+        warped_img = cv2.warpPerspective(img1, H, (w2, h2))
+        
+        # Convert warped image to RGB for matplotlib
+        warped_img_rgb = cv2.cvtColor(warped_img, cv2.COLOR_BGR2RGB)
+        
+        # Create a new figure for the side-by-side comparison of full images
+        fig2, axes = plt.subplots(1, 3, figsize=(18, 6))
+        
+        # Show the original source image
+        axes[0].imshow(img1_rgb)
+        axes[0].set_title("Original Image 1")
+        axes[0].axis('off')
+        
+        # Show the warped image (image1 transformed with homography)
+        axes[1].imshow(warped_img_rgb)
+        axes[1].set_title("Transformed Image 1")
+        axes[1].axis('off')
+        
+        # Show the target image
+        axes[2].imshow(img2_rgb)
+        axes[2].set_title("Target Image 2")
+        axes[2].axis('off')
+        
+        plt.tight_layout()
+        plt.savefig("transformed_comparison.png")
+        print("Full image transformation comparison saved as 'transformed_comparison.png'")
+        
+        # Create an overlay visualization to see the differences
+        # Create a blend of the warped image and target image
+        alpha = 0.5  # Transparency factor
+        
+        # Create the overlay
+        fig3, ax = plt.subplots(figsize=(10, 8))
+        ax.imshow(img2_rgb)  # Show target image as background
+        ax.imshow(warped_img_rgb, alpha=alpha)  # Overlay warped image with transparency
+        ax.set_title("Overlay: Transformed Image 1 + Image 2")
+        ax.axis('off')
+        
+        plt.tight_layout()
+        plt.savefig("transformation_overlay.png")
+        print("Overlay visualization saved as 'transformation_overlay.png'")
+        
     except ImportError:
         print("OpenCV not available, skipping visualization")
     except Exception as e:

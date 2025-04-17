@@ -1,6 +1,6 @@
 {
-    "image1": "/data/awsaf/projects/ece281/Hierarchical-Localization/datasets/front-door/IMG_1224.JPG",
-    "image2": "/data/awsaf/projects/ece281/Hierarchical-Localization/datasets/front-door/IMG_1225.JPG",
+    "image1": "datasets/front-door/IMG_1224.JPG",
+    "image2": "datasets/front-door/IMG_1225.JPG",
     "point_pairs": [
         {
             "image1_point": [
