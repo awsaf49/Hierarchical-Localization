@@ -218,7 +218,7 @@ def visualize_homography_mapping(
 
 def main():
     # Load point pairs from JSON
-    with open("point_pairs.json", "r") as f:
+    with open("point_pairs_homography.json", "r") as f:
         data = json.load(f)
 
     # Extract image paths and point pairs
