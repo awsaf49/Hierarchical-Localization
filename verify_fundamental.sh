@@ -1,0 +1,2 @@
+# python3 VerifyFundamental.py --image1 datasets/front-door/IMG_1224.JPG --image2 datasets/front-door/IMG_1230.JPG --draw
+python3 VerifyFundamentalwithDLT.py --img1 datasets/front-door/IMG_1224.JPG --img2 datasets/front-door/IMG_1230.JPG

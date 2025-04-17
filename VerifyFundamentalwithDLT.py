@@ -101,10 +101,10 @@ def load_correspondences(json_file):
 
 def main():
     parser = argparse.ArgumentParser(description='Verify Fundamental Matrix via epipolar lines')
-    parser.add_argument('corr', help='JSON file with point_pairs')
-    parser.add_argument('img1', help='First image')
-    parser.add_argument('img2', help='Second image')
-    parser.add_argument('--save', '-s', help='Save concatenated output to file')
+    parser.add_argument('--corr', default="point_pairs_fundamental.json", help='JSON file with point_pairs')
+    parser.add_argument('--img1', help='First image')
+    parser.add_argument('--img2', help='Second image')
+    parser.add_argument('--save', '-s', default="output_fandamental.png", help='Save concatenated output to file')
     args = parser.parse_args()
 
     pts1, pts2 = load_correspondences(args.corr)

@@ -97,9 +97,9 @@ def main():
     parser = argparse.ArgumentParser(
         description="Verify fundamental matrix with epipolar error and full-resolution visualization"
     )
-    parser.add_argument('points', help="Path to JSON file of point correspondences")
-    parser.add_argument('image1', help="First image path")
-    parser.add_argument('image2', help="Second image path")
+    parser.add_argument('--points', default="point_pairs_fundamental.json", help="Path to JSON file of point correspondences")
+    parser.add_argument('--image1', help="First image path")
+    parser.add_argument('--image2', help="Second image path")
     parser.add_argument('--draw', '-d', action='store_true',
                         help="Draw epipolar lines and points on both images at full size")
     args = parser.parse_args()
