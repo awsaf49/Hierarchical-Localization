@@ -188,10 +188,15 @@ def main():
         "--fundamental", "-f", action="store_true",
         help="Compute fundamental matrix from saved points"
     )
+    parser.add_argument(
+        "--point_pairs", "-p",
+        help="Path to the JSON file containing point correspondences",
+        default="point_pairs_fundamental.json"
+    )
     args = parser.parse_args()
 
     if args.fundamental:
-        compute_fundamental_from_points(args.output)
+        compute_fundamental_from_points(args.point_pairs)
     else:
         if not args.image1 or not args.image2:
             parser.error("--image1 and --image2 are required when not computing fundamental.")

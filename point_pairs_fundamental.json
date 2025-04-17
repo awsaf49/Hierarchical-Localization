@@ -1,0 +1,146 @@
+{
+    "image1": "/mnt/e/github/Hierarchical-Localization/datasets/front-door/IMG_1224.JPG",
+    "image2": "/mnt/e/github/Hierarchical-Localization/datasets/front-door/IMG_1230.JPG",
+    "point_pairs": [
+        {
+            "image1_point": [
+                1322,
+                1180
+            ],
+            "image2_point": [
+                1492,
+                478
+            ]
+        },
+        {
+            "image1_point": [
+                1886,
+                1210
+            ],
+            "image2_point": [
+                2218,
+                442
+            ]
+        },
+        {
+            "image1_point": [
+                1082,
+                2907
+            ],
+            "image2_point": [
+                1306,
+                2559
+            ]
+        },
+        {
+            "image1_point": [
+                1874,
+                2925
+            ],
+            "image2_point": [
+                2254,
+                2595
+            ]
+        },
+        {
+            "image1_point": [
+                1330,
+                1992
+            ],
+            "image2_point": [
+                1604,
+                1485
+            ]
+        },
+        {
+            "image1_point": [
+                1280,
+                2684
+            ],
+            "image2_point": [
+                1600,
+                2256
+            ]
+        },
+        {
+            "image1_point": [
+                1923,
+                2000
+            ],
+            "image2_point": [
+                2294,
+                1481
+            ]
+        },
+        {
+            "image1_point": [
+                1904,
+                2693
+            ],
+            "image2_point": [
+                2300,
+                2271
+            ]
+        },
+        {
+            "image1_point": [
+                1231,
+                2777
+            ],
+            "image2_point": [
+                1522,
+                2376
+            ]
+        },
+        {
+            "image1_point": [
+                1315,
+                2694
+            ],
+            "image2_point": [
+                1631,
+                2269
+            ]
+        },
+        {
+            "image1_point": [
+                1923,
+                2794
+            ],
+            "image2_point": [
+                2320,
+                2398
+            ]
+        },
+        {
+            "image1_point": [
+                1919,
+                2709
+            ],
+            "image2_point": [
+                2320,
+                2289
+            ]
+        },
+        {
+            "image1_point": [
+                2407,
+                1915
+            ],
+            "image2_point": [
+                2936,
+                1327
+            ]
+        },
+        {
+            "image1_point": [
+                213,
+                1249
+            ],
+            "image2_point": [
+                290,
+                663
+            ]
+        }
+    ]
+}
