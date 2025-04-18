@@ -1,0 +1,96 @@
+{
+    "image1": "/mnt/e/github/Hierarchical-Localization/datasets/front-door/IMG_1197.JPG",
+    "image2": "/mnt/e/github/Hierarchical-Localization/datasets/front-door/IMG_1223.JPG",
+    "point_pairs": [
+        {
+            "image1_point": [
+                1466,
+                1054
+            ],
+            "image2_point": [
+                1570,
+                694
+            ]
+        },
+        {
+            "image1_point": [
+                1640,
+                1336
+            ],
+            "image2_point": [
+                1966,
+                1162
+            ]
+        },
+        {
+            "image1_point": [
+                1118,
+                2116
+            ],
+            "image2_point": [
+                790,
+                2457
+            ]
+        },
+        {
+            "image1_point": [
+                1730,
+                1702
+            ],
+            "image2_point": [
+                2266,
+                1798
+            ]
+        },
+        {
+            "image1_point": [
+                2294,
+                1714
+            ],
+            "image2_point": [
+                3442,
+                1822
+            ]
+        },
+        {
+            "image1_point": [
+                1400,
+                814
+            ],
+            "image2_point": [
+                1408,
+                328
+            ]
+        },
+        {
+            "image1_point": [
+                1508,
+                1828
+            ],
+            "image2_point": [
+                1534,
+                1990
+            ]
+        },
+        {
+            "image1_point": [
+                1478,
+                2140
+            ],
+            "image2_point": [
+                1528,
+                2535
+            ]
+        },
+        {
+            "image1_point": [
+                2078,
+                1630
+            ],
+            "image2_point": [
+                2944,
+                1672
+            ]
+        }
+    ]
+}

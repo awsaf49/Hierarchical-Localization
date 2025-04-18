@@ -1,0 +1,133 @@
+{
+    "image_a": "/mnt/e/github/Hierarchical-Localization/datasets/front-door/IMG_1197.JPG",
+    "image_b": "/mnt/e/github/Hierarchical-Localization/datasets/front-door/IMG_1225.JPG",
+    "image_c": "/mnt/e/github/Hierarchical-Localization/datasets/front-door/IMG_1230.JPG",
+    "point_triplets": [
+        {
+            "image_a_point": [
+                1394,
+                1680
+            ],
+            "image_b_point": [
+                2100,
+                1810
+            ],
+            "image_c_point": [
+                1331,
+                1235
+            ]
+        },
+        {
+            "image_a_point": [
+                1709,
+                1708
+            ],
+            "image_b_point": [
+                3444,
+                2004
+            ],
+            "image_c_point": [
+                2926,
+                1318
+            ]
+        },
+        {
+            "image_a_point": [
+                2340,
+                1272
+            ],
+            "image_b_point": [
+                3833,
+                1411
+            ],
+            "image_c_point": [
+                3881,
+                521
+            ]
+        },
+        {
+            "image_a_point": [
+                1450,
+                1355
+            ],
+            "image_b_point": [
+                2267,
+                1244
+            ],
+            "image_c_point": [
+                1489,
+                456
+            ]
+        },
+        {
+            "image_a_point": [
+                1404,
+                2125
+            ],
+            "image_b_point": [
+                2072,
+                2792
+            ],
+            "image_c_point": [
+                1304,
+                2357
+            ]
+        },
+        {
+            "image_a_point": [
+                1765,
+                1309
+            ],
+            "image_b_point": [
+                3120,
+                1272
+            ],
+            "image_c_point": [
+                2657,
+                428
+            ]
+        },
+        {
+            "image_a_point": [
+                2080,
+                1587
+            ],
+            "image_b_point": [
+                3778,
+                1791
+            ],
+            "image_c_point": [
+                3575,
+                1050
+            ]
+        },
+        {
+            "image_a_point": [
+                1626,
+                1763
+            ],
+            "image_b_point": [
+                2137,
+                2004
+            ],
+            "image_c_point": [
+                1600,
+                1495
+            ]
+        },
+        {
+            "image_a_point": [
+                1302,
+                1875
+            ],
+            "image_b_point": [
+                1173,
+                2190
+            ],
+            "image_c_point": [
+                293,
+                1717
+            ]
+        }
+    ]
+}
